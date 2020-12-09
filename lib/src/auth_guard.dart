@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-import '_guard.dart';
+import 'package:flutter_guards/src/_guard.dart';
 import 'stream_guard.dart';
+
+_getAuthenticatedFn(bool authenticated, Widget signedIn, Widget signedOut) {
+  signedIn = signedIn ?? Container();
+  signedOut = signedOut ?? Container();
+  return authenticated ? signedIn : signedOut;
+}
 
 class AuthGuard extends StreamGuard {
   AuthGuard({
-    Stream<bool> authenticated,
-    Widget authenticatedScreen,
-    Widget unauthenticatedScreen,
-    Widget loadScreen,
-    ErrorFn onError,
+    @required Stream<bool> authStream,
+    Widget signedIn,
+    Widget signedOut,
+    Widget loading,
+    Widget error,
   }) : super(
-          stream: authenticated,
-          onData: (_authenticated) =>
-              _authenticated ? authenticatedScreen : unauthenticatedScreen,
-          onLoad: () => loadScreen,
-          onError: onError,
+          stream: authStream,
+          onData: (authenticated) =>
+              _getAuthenticatedFn(authenticated, signedIn, signedOut),
+          onLoad: loading != null ? () => loading : dummyLoadFn,
+          onError: error != null ? (e) => error : dummyErrorFn,
         );
 }

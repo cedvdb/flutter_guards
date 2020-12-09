@@ -1,48 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_guards/flutter_guards.dart';
 
-class FutureGuardExample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FutureGuard<bool>(
-      future: Future.delayed(Duration(seconds: 2)).then((value) => true),
-      onData: (data) => HomePage(),
-      onLoad: () => LoadingPage(),
-      onError: (e) => ErrorPage(),
-    );
-  }
-}
-
-class StreamGuardExample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamGuard<bool>(
-      stream: Stream.fromFuture(Future.delayed(Duration(seconds: 2)))
-          .map((event) => true),
-      onData: (data) => HomePage(),
-      onLoad: () => LoadingPage(),
-      onError: (e) => ErrorPage(),
-    );
-  }
-}
-
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final preload = Future.delayed(Duration(seconds: 2));
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: Text('examples')),
-        body: Root(),
+      home: LoadingGuard(
+        load: preload,
+        loading: LoadingPage(),
+        success: Scaffold(
+          appBar: AppBar(title: Text('examples')),
+          body: Root(),
+        ),
       ),
     );
   }
@@ -74,6 +49,30 @@ class Root extends StatelessWidget {
   }
 }
 
+class FutureGuardExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureGuard<bool>(
+      future: Future.delayed(Duration(seconds: 2)).then((value) => true),
+      onData: (data) => HomePage('Future data received'),
+      onLoad: () => LoadingPage(),
+      onError: (e) => ErrorPage(),
+    );
+  }
+}
+
+class StreamGuardExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamGuard<bool>(
+      stream: Stream.periodic(Duration(seconds: 2)).map((event) => true),
+      onData: (data) => HomePage('Stream data received'),
+      onLoad: () => LoadingPage(),
+      onError: (e) => ErrorPage(),
+    );
+  }
+}
+
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -97,11 +96,15 @@ class ErrorPage extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  final String title;
+
+  HomePage(this.title);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Text('Home'),
+      body: Center(child: Text(title)),
     );
   }
 }

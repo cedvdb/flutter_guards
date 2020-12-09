@@ -5,29 +5,29 @@ typedef Widget LoadFn();
 typedef Widget ErrorFn(Object error);
 
 Widget dummyDataFn(data) => Container(child: Text(data.toString()));
-Widget dummyLoadFn() => Container(child: Text('Loading...'));
+Widget dummyLoadFn() => Container();
 Widget dummyErrorFn(error) => Container(child: Text(error.toString()));
 
 abstract class Guard<T> extends StatelessWidget {
-  final LoadFn onLoad;
-  final DataFn<T> onData;
-  final ErrorFn onError;
+  final LoadFn loading;
+  final DataFn<T> success;
+  final ErrorFn error;
 
   const Guard([
-    onData,
-    onLoad,
-    onError,
-  ])  : onData = onData ?? dummyDataFn,
-        onLoad = onLoad ?? dummyLoadFn,
-        onError = onError ?? dummyErrorFn;
+    success,
+    loading,
+    error,
+  ])  : success = success ?? dummyDataFn,
+        loading = loading ?? dummyLoadFn,
+        error = error ?? dummyErrorFn;
 
   Widget builder(BuildContext context, AsyncSnapshot<T> snapshot) {
     if (snapshot.hasError) {
-      return onError(snapshot.error);
+      return error(snapshot.error);
     }
     if (snapshot.hasData || snapshot.connectionState == ConnectionState.done) {
-      return onData(snapshot.data);
+      return success(snapshot.data);
     }
-    return onLoad();
+    return loading();
   }
 }
