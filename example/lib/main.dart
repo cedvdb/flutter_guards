@@ -1,22 +1,32 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_guards/flutter_guards.dart';
 
+StreamController<bool> authState = StreamController();
+
 void main() {
+  authState.add(false);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final preload = Future.delayed(Duration(seconds: 2));
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // loading guard to preload stuff before running the app (like firebase initialization)
       home: LoadingGuard(
         load: preload,
         loading: LoadingPage(),
         success: Scaffold(
           appBar: AppBar(title: Text('examples')),
-          body: Root(),
+          // once everything is loaded we use the auth guard to protect screens
+          body: AuthGuard(
+            authStream: authState.stream,
+            signedIn: Root(),
+            signedOut: SignInPage(),
+          ),
         ),
       ),
     );
@@ -43,6 +53,10 @@ class Root extends StatelessWidget {
         RaisedButton(
           onPressed: () => go(context, StreamGuardExample()),
           child: Text('Stream Guard Example'),
+        ),
+        RaisedButton(
+          onPressed: () => authState.add(false),
+          child: Text('Sign Out'),
         ),
       ],
     );
@@ -78,6 +92,9 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: FlatButton(
+        onPressed: () {
+          authState.add(true);
+        },
         child: Text('sign in'),
       ),
     );
