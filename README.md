@@ -10,7 +10,7 @@ Simple package containing the following guards:
 
 # Usage
 
-FutureGuard and Stream guards take callbacks as parameters that will be executed on loading, on success and on data. 
+FutureGuard and Stream guards takes buiders that will be executed on loading, on success and on data to display a widget. 
 While the other guards take direct widgets.
 
 ## LoadingGuard

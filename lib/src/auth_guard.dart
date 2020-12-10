@@ -8,6 +8,8 @@ _getAuthenticatedFn(bool authenticated, Widget signedIn, Widget signedOut) {
   return authenticated ? signedIn : signedOut;
 }
 
+/// gets 3 builder function to load a widget on 3 states of a stream
+/// on loading, on data, or on error.
 class AuthGuard extends StreamGuard {
   AuthGuard({
     @required Stream<bool> authStream,
