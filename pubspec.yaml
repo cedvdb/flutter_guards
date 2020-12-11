@@ -1,8 +1,8 @@
 name: flutter_guards
 description: Contains LoadingGuard, AuthGuard, FutureGuard, StreamGuard 
 version: 0.0.1
-author: cedvdb
 homepage: https://github.com/cedvdb/flutter_guards.git
+repository: https://github.com/cedvdb/flutter_guards.git
 
 
 environment:
