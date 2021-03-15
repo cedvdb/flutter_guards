@@ -8,13 +8,13 @@ import 'future_guard.dart';
 /// success widget is displayed when the future completes
 class LoadingGuard<T> extends FutureGuard<T> {
   LoadingGuard({
-    Future load,
-    Widget success,
-    Widget loading,
-    Widget error,
+    required Future<T> load,
+    required Widget success,
+    Widget? loading,
+    Widget? error,
   }) : super(
-          future: load ?? Future.value(),
-          onData: success != null ? (_) => success : dummyDataFn,
+          future: load,
+          onData: (_) => success,
           onError: error != null ? (e) => error : dummyErrorFn,
           onLoad: loading != null ? () => loading : dummyLoadFn,
         );

@@ -71,15 +71,5 @@ void main() {
         expect(loadingFinder, findsNothing);
       });
     });
-
-    testWidgets('AuthGuard should render without optional args',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: AuthGuard(
-          authStream: Stream.value(true),
-        ),
-      ));
-      await tester.pump();
-    });
   });
 }

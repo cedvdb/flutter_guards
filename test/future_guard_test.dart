@@ -6,7 +6,7 @@ import '_pages_utils.dart';
 
 void main() {
   group('FutureGuard', () {
-    final futureGuardApp = (future) => MaterialApp(
+    final futureGuardApp = (Future future) => MaterialApp(
           home: FutureGuard(
             future: future,
             onData: (data) => homePage,
@@ -18,7 +18,7 @@ void main() {
     testWidgets('FutureGuard should render loading state',
         (WidgetTester tester) async {
       await tester.runAsync(() async {
-        final future = Future.delayed(Duration(milliseconds: 200));
+        Future<void> future = Future.delayed(Duration(milliseconds: 200));
         await tester.pumpWidget(futureGuardApp(future));
         await tester.pump();
         final loadingFinder = find.text(loading);
@@ -50,16 +50,6 @@ void main() {
         final loadingFinder = find.text(loading);
         expect(loadingFinder, findsNothing);
       });
-    });
-
-    testWidgets('FutureGuard should render without optional args',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: FutureGuard(
-          future: Future.value(true),
-        ),
-      ));
-      await tester.pump();
     });
   });
 }

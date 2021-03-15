@@ -53,15 +53,5 @@ void main() {
         expect(loadingFinder, findsNothing);
       });
     });
-
-    testWidgets('LoadingGuard should render without optional args',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: LoadingGuard(
-          load: Future.value(true),
-        ),
-      ));
-      await tester.pump();
-    });
   });
 }

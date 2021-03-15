@@ -6,7 +6,6 @@ import '_pages_utils.dart';
 
 void main() {
   group('StreamGuard', () {
-    // final futureError = Future.delayed(Duration(milliseconds: 20));
     final streamGuardApp = (stream) => MaterialApp(
           home: StreamGuard(
             stream: stream,
@@ -15,14 +14,6 @@ void main() {
             onError: (e) => errorPage,
           ),
         );
-    // final futureGuardAppError = MaterialApp(
-    //   home: FutureGuard(
-    //     future: futureError,
-    //     onData: (data) => homePage,
-    //     onLoad: () => loadingPage,
-    //     onError: (e) => errorPage,
-    //   ),
-    // );
 
     testWidgets('StreamGuard should render loading state',
         (WidgetTester tester) async {
@@ -61,16 +52,6 @@ void main() {
         final loadingFinder = find.text(loading);
         expect(loadingFinder, findsNothing);
       });
-    });
-
-    testWidgets('StreamGuard should render without optional args',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: StreamGuard(
-          stream: Stream.value(true),
-        ),
-      ));
-      await tester.pump();
     });
   });
 }

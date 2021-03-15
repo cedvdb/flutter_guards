@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-typedef Widget DataFn<T>(T result);
+typedef Widget DataFn<T>(T? result);
 typedef Widget LoadFn();
 typedef Widget ErrorFn(Object error);
 
@@ -10,20 +10,20 @@ Widget dummyErrorFn(error) => Container(child: Text(error.toString()));
 
 abstract class Guard<T> extends StatelessWidget {
   final LoadFn loading;
-  final DataFn<T> success;
+  final DataFn<T?> success;
   final ErrorFn error;
 
-  const Guard([
-    success,
-    loading,
-    error,
-  ])  : success = success ?? dummyDataFn,
+  const Guard(
+    DataFn<T> success, [
+    LoadFn? loading,
+    ErrorFn? error,
+  ])  : success = success,
         loading = loading ?? dummyLoadFn,
         error = error ?? dummyErrorFn;
 
-  Widget builder(BuildContext context, AsyncSnapshot<T> snapshot) {
+  Widget builder(BuildContext context, AsyncSnapshot<T?> snapshot) {
     if (snapshot.hasError) {
-      return error(snapshot.error);
+      return error(snapshot.error!);
     }
     if (snapshot.hasData || snapshot.connectionState == ConnectionState.done) {
       return success(snapshot.data);
