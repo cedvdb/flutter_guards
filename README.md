@@ -1,3 +1,6 @@
+
+Don't use, unmaintained.
+
 # flutter_guards
 
 Simple package containing the following guards:
